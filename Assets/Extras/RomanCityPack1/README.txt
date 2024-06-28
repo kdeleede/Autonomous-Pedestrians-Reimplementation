@@ -1,0 +1,111 @@
+I would recommend downloading the Official Unity PostProcessing stack (https://www.assetstore.unity3d.com/en/#!/content/83912) and turning on Ambient Occlusion to improve the look of Low Poly models.
+
+All pieces are <550 polygons, and come in 2 visually identical versions: standard (separate material) and optimized (single shared texture) version to allow both customization and optimization, depending on your needs.
+Standard models are under the Models/Roman directory, and optimized versions are under the Models/Roman/Optimized directory.
+
+Full list of all 105 models and their poly counts:
+- Arch (tall) - 152 Polys
+- Arch (medium) - 196
+- Arch (short) - 152
+- Barrel - 156
+- Bench (Stone) - 68
+- Bench (Wood) - 68
+- Fishing Boat - 418
+- Rowboat - 122
+- Bookcase - 64
+- Campfire - 450
+- Canopy (Hanging) - 336
+- Canopy (Standing, Slanted) - 172
+- Canopy (Standing, Straight) - 336
+- Cart - 548
+- Chair - 164
+- Column (Tall) - 130
+- Column (Short) - 130
+- Column (Broken, Base) - 66
+- Column (Broken, Middle) - 32
+- Crate (Closed) - 302
+- Crate (Open, Square) - 128
+- Crate (Open, Rectangular) - 148
+- Dock - 232
+- Door (Variation 1) - 304
+- Door (Variation 2) - 72
+- Door (Variation 3) - 132
+- Fence (Iron) - 138
+- Fence (Iron, Half) - 130
+- Fence (Wood, Variation 1) - 84
+- Fence (Wood, Variation 2) - 60
+- Fence (Stone) - 326
+- Floor (Variation 1) - 12
+- Floor (Variation 2) - 65
+- Floor (Variation 3) - 142
+- Floor (Variation 4) - 78
+- Fountain (Big) - 518
+- Fountain (Small) - 130
+- Pool - 54
+- Garden Plot (Square) - 28
+- Garden Plot (Long) - 28
+- Gate (Iron, Left) - 114
+- Gate (Iron, Right) - 114
+- Ladder - 96
+- Pot (Variation 1) - 252
+- Pot (Variation 2) - 252
+- Pot (Variation 3) - 284
+- Roof (Stone, Rectangular) - 40
+- Roof (Stone, Square) - 40
+- Roof (Tile, Slanted) - 124
+- Roof (Tile, Square) - 174
+- Slanted Tile Roof End Cap - 50
+- Roof Support (Rectangular, Variation 1) - 60
+- Roof Support (Square, Variation 1) - 60
+- Roof Support (Rectangular, Variation 2) - 28
+- Roof Support (Square, Variation 2) - 28
+- Roof Support (Rectangular, Variation 3) - 12
+- Roof Support (Square, Variation 3) - 12
+- Stairs (Straight) - 60
+- Stairs (Corner) - 68
+- Stairs (Corner, Half) - 43
+- Standard (Variation 1) - 324
+- Standard (Variation 2) - 97
+- Table (Small) - 140
+- Table (Rectangular) - 160
+- Table (Big) - 212
+- Torch - 108
+- Tree (Bush) - 100
+- Tree (Cyprus, Short) - 60
+- Tree (Cyprus, Medium) - 56
+- Tree (Cyprus, Tall) - 56
+- Tree (Pine, Variation 1) - 333
+- Tree (Pine, Variation 2) - 396
+- Tree (Pine, Variation 3) - 276
+- Wall (Variation 1) - 65
+- Wall (Door, Variation 1) - 106
+- Wall (Window, Variation 1) - 115
+- Wall (Variation 2) - 53
+- Wall (Door, Variation 2) - 103
+- Wall (Window, Variation 2) - 103
+- Wall (Variation 3) - 60
+- Wall (Door, Variation 3) - 114
+- Wall (Window, Variation 3) - 110
+- Wall (Variation 4) - 124
+- Wall (Door, Variation 4) - 115
+- Wall (Window, Variation 4) - 135
+- Wall (Variation 5) - 12
+- Wall (Door, Variation 5) - 82
+- Wall (Window, Variation 5) - 58
+- Wall Arch - 152
+- Wall Corner - 12
+- Wall Column (Variation 1) - 60
+- Wall Column (Variation 2) - 74
+- Wall Column (Variation 3) - 68
+- Wall (Half) - 28
+- Arrow - 70
+- Bow - 176
+- Gladius - 84
+- Helmet - 526
+- Knife - 110
+- Quiver - 96
+- Shield - 199
+- Spear - 104
+- Well - 541
+- Window Shutters (Variation 1) - 28
+- Window Shutters (Variation 2) - 268

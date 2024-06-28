@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!49 &4900000
+TextAsset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: mbs-pack-descriptor
+  m_Script: "{\n    \"guid\": \"0d60d7f9027648518e0b8b42aaf6651d\",\n    \"_name\":
+    \"Roman\",\n    \"_wallGroups\": [\n        {\n            \"guid\": \"5f76b7499dbf4e11a5c419177df220f2\",\n           
+    \"name\": \"Arch\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"3f85d7d8695540358b186f26c6d9135f\",\n                    \"name\":
+    \"New Wall Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 100000,\n                           
+    \"guid\": \"486cc62dfe5ed472cbf5229f6ea694e6\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"3b3ac0297bef4b2389ecf2d583cedcf0\",\n           
+    \"name\": \"Door\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"b1469b6c44fb41b1bf974d12aa42992c\",\n                    \"name\":
+    \"New Wall Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 1590262943227808,\n                           
+    \"guid\": \"8deab025927124e4ca1e01a376678887\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"8bc91e93a0034e2a88ed35205d23b696\",\n           
+    \"name\": \"New Wall Group (1)\",\n            \"_modules\": [\n               
+    {\n                    \"guid\": \"55982e02514447b581aab403878c4318\",\n                   
+    \"name\": \"New Wall Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 1922759381743082,\n                           
+    \"guid\": \"ccf2de93723bf4d81bf5e0de7d6845b7\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"646c00b9f03c47ad9b564756c6db4aff\",\n           
+    \"name\": \"Bare Wall\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"e95399006b64409883dec87c0b6938dc\",\n                    \"name\":
+    \"New Wall Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 100000,\n                           
+    \"guid\": \"493463d0df79b44a48b2068fc1ee9aa5\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"aa98b066069943ce81fbea9b82078d93\",\n           
+    \"name\": \"Big Wall\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"94fe5b29ce37420081e8f795cfb36438\",\n                    \"name\":
+    \"New Wall Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 8387091734241882761,\n                           
+    \"guid\": \"0b827891fba273a4db6cbe729bf9cd56\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        }\n    ],\n    \"_floorGroups\": [\n        {\n           
+    \"guid\": \"a08b461e7ff9463cb76bde2d8d360eaa\",\n            \"name\": \"Checkered\",\n           
+    \"_modules\": [\n                {\n                    \"guid\": \"df92464f503a49ddbf07a466525f7bb4\",\n                   
+    \"name\": \"New Floor Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 1557592460613130,\n                           
+    \"guid\": \"5c2c263f6ecb54cda849c8e2f7ddf23c\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"7ade25881565433d951d88a907f9ed98\",\n           
+    \"name\": \"Checkered 2\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"3a31e893dc26464d92b9a6020112b9e6\",\n                    \"name\":
+    \"New Floor Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 1003889552315044,\n                           
+    \"guid\": \"9f18edfc28f22408dae2254f2ab173cd\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"ad2e0d0ab9004555b2d3b1468666b4fd\",\n           
+    \"name\": \"New Floor Group\",\n            \"_modules\": [\n               
+    {\n                    \"guid\": \"e8c351078c664e51bb62caf776f6576f\",\n                   
+    \"name\": \"New Floor Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 100000,\n                           
+    \"guid\": \"6926e7b041657430eba9c455bbd6dbe4\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        },\n        {\n            \"guid\": \"efd190d84de849aabd7f4a5fe369845a\",\n           
+    \"name\": \"New Floor Group (1)\",\n            \"_modules\": [\n               
+    {\n                    \"guid\": \"2c28b857e3f94c75a041a483db0857d7\",\n                   
+    \"name\": \"New Floor Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 1421671271014128,\n                           
+    \"guid\": \"10a82ee0a42e14c9db11d6707b30410d\",\n                           
+    \"type\": 3\n                        },\n                        {\n                           
+    \"instanceID\": 0\n                        }\n                    ]\n               
+    }\n            ]\n        }\n    ],\n    \"_decoratorGroups\": [\n        {\n           
+    \"guid\": \"e4d0ddb9eebf4fc6b96da6d09f753a0b\",\n            \"name\": \"New
+    Decor Group\",\n            \"_modules\": [\n                {\n                   
+    \"guid\": \"33478f49e010405cb900d7c08870e53d\",\n                    \"name\":
+    \"New Decor Module\",\n                    \"prefabs\": [\n                       
+    {\n                            \"fileID\": 100000,\n                           
+    \"guid\": \"63dba35fc83b74574856a6c1fa681007\",\n                           
+    \"type\": 3\n                        }\n                    ]\n               
+    }\n            ],\n            \"_assetCategoryGuid\": \"e1d08876f80f498dad577eb658d93433\"\n       
+    }\n    ],\n    \"_decoratorCategories\": [\n        {\n            \"guid\":
+    \"e1d08876f80f498dad577eb658d93433\",\n            \"_name\": \"All\"\n       
+    }\n    ]\n}"
