@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MBS:Floor
   - MBS:Wall
+  - Pedestrian
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Pedestrian
+  - TicketBooth
   - 
   - 
   - 
