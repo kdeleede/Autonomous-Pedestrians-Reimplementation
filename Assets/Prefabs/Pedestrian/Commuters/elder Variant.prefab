@@ -1,0 +1,283 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8771634479915704587
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_Name
+      value: elder Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -68.62802
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.99999
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 45.116
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862504200042160624, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 464d8b1198735694887882ff604e5a9d, type: 2}
+    m_RemovedComponents:
+    - {fileID: 6964253449126897533, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1681007296174213183}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 250326794726082078}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 797893023134482967}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7905574447625178189}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 463194887016415915}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -702827325607417816}
+  m_SourcePrefab: {fileID: 100100000, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+--- !u!1 &8875579295769002043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+  m_PrefabInstance: {fileID: 8771634479915704587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &1681007296174213183
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.25
+  m_Speed: 2.2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.5
+  m_BaseOffset: -0.1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &250326794726082078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ac45f3034031641b1d69e42c4da47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensingDistance: 10
+  rotationSpeed: 3
+  ticketBoothLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  entertainersLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  couchLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  vendingMachineLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  destinationRadius: 5
+  maxSlope: 30
+  maxAttempts: 10
+  hasTicket: 1
+  assignedTrain: {fileID: 0}
+  selectedBooth: {fileID: 0}
+  currentQueuePosition: 0
+  currentAction: 0
+  isWatchingDance: 0
+  isSitting: 0
+  selectedEntertainer: {fileID: 0}
+  selectedCouch: {fileID: 0}
+  selectedSeat: {fileID: 0}
+  ticketLocations: []
+  concordLocations: []
+  vendingMachineLocations: []
+  danceSpotLocations: []
+  couchLocations: []
+  exitLocations: []
+  oldPriority: 0
+--- !u!65 &797893023134482967
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &7905574447625178189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16645e3a1a78a6f439f89bc56ed56a75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensingDistance: 5
+  separationDistance: 0.1
+  separationStrength: 0.3
+--- !u!114 &463194887016415915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e0f10df60679947a457de8aa300c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensingDistance: 10
+  rotationSpeed: 3
+  ticketBoothLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  entertainersLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  couchLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  vendingMachineLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  destinationRadius: 5
+  maxSlope: 30
+  maxAttempts: 10
+  hasTicket: 0
+  assignedTrain: {fileID: 0}
+  selectedBooth: {fileID: 0}
+  currentQueuePosition: 0
+  currentAction: 0
+  isWatchingDance: 0
+  isSitting: 0
+  selectedEntertainer: {fileID: 0}
+  selectedCouch: {fileID: 0}
+  selectedSeat: {fileID: 0}
+  ticketLocations: []
+  concordLocations: []
+  vendingMachineLocations: []
+  danceSpotLocations: []
+  couchLocations: []
+  exitLocations: []
+  oldPriority: 0
+--- !u!114 &-702827325607417816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcdbaea9f99f27c41aac79ed2ab52d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensingDistance: 10
+  rotationSpeed: 3
+  ticketBoothLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  entertainersLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  couchLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  vendingMachineLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  destinationRadius: 5
+  maxSlope: 30
+  maxAttempts: 10
+  hasTicket: 0
+  assignedTrain: {fileID: 0}
+  selectedBooth: {fileID: 0}
+  currentQueuePosition: 0
+  currentAction: 0
+  isWatchingDance: 0
+  isSitting: 0
+  selectedEntertainer: {fileID: 0}
+  selectedCouch: {fileID: 0}
+  selectedSeat: {fileID: 0}
+  ticketLocations: []
+  concordLocations: []
+  vendingMachineLocations: []
+  danceSpotLocations: []
+  couchLocations: []
+  exitLocations: []
+  oldPriority: 0

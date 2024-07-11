@@ -24,14 +24,15 @@ public class Commuter : AutonomousPedestrian
             }
             else // Pick most urgent desire
             {
-                /*
+                
                 if(hurriedness == 1)
                 {
                     // Go to train
+                    currentAction = PedestrianAction.GotToTrain;
                     Debug.Log("hurried");
                 }
-                */
-                if(thirst >= attraction && thirst >= tiredness)
+                
+                else if(thirst >= attraction && thirst >= tiredness)
                 {
                     // Go get a drink
                     currentAction = PedestrianAction.GoToVendingMachine;
@@ -40,16 +41,16 @@ public class Commuter : AutonomousPedestrian
                 else if(attraction >= thirst && attraction >= tiredness)
                 {
                     // Go watch entertainers
-                    currentAction = PedestrianAction.Idle;
-                    Debug.Log("attracted");
-
+                    currentAction = PedestrianAction.GoToWatchDance;
+                    //Debug.Log("attracted");
                 }
                 else
                 {
                     // Find a bench
-                    currentAction = PedestrianAction.Idle;
-                    Debug.Log("tired");
-                }            
+                    currentAction = PedestrianAction.GoToSeat;
+                    //Debug.Log("tired");
+                }
+                            
             }
         }
         else

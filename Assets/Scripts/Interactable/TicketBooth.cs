@@ -52,7 +52,7 @@ public class TicketBooth : MonoBehaviour
     public Vector3 getQueueTransformPosition(AutonomousPedestrian pedestrian)
     {
         Vector3 offset = new Vector3(0, 0, -1.5f);
-        Vector3 StartingPosition = transform.position + new Vector3(0, 0, -3.3f);
+        Vector3 StartingPosition = transform.position + new Vector3(0, 0, -1.5f);
 
         return StartingPosition + offset * checkQueuePosition(pedestrian);
     }
