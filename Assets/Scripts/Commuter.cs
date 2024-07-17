@@ -9,7 +9,7 @@ public class Commuter : AutonomousPedestrian
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(BehaviourControl());
+        StartCoroutine(base.BehaviourControl());
     }
 
     protected override void Update()

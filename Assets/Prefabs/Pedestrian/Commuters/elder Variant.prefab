@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: elder Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 710636224206764938, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -68.62802
@@ -79,6 +83,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: -702827325607417816}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5435995787832585228}
+    - targetCorrespondingSourceObject: {fileID: 186757882122740016, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4257686634226752769}
   m_SourcePrefab: {fileID: 100100000, guid: bcc8732b8b44622449c23934f89e68c0, type: 3}
 --- !u!1 &8875579295769002043 stripped
 GameObject:
@@ -119,8 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ac45f3034031641b1d69e42c4da47c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
   sensingDistance: 10
   rotationSpeed: 3
+  pedestrianAttributes: {fileID: 0}
   ticketBoothLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -136,6 +148,7 @@ MonoBehaviour:
   destinationRadius: 5
   maxSlope: 30
   maxAttempts: 10
+  isFullfillingDesire: 0
   hasTicket: 1
   assignedTrain: {fileID: 0}
   selectedBooth: {fileID: 0}
@@ -153,6 +166,20 @@ MonoBehaviour:
   couchLocations: []
   exitLocations: []
   oldPriority: 0
+  door: {fileID: 0}
+  leader: {fileID: 0}
+  isHolder: 0
+  isFollower: 0
+  inDoorwayRegion: 0
+  onPushSide: 0
+  onPullSide: 0
+  waitingTime: 0
+  id: 0
+  OldDestination: {x: 0, y: 0, z: 0}
+  oldFulfillingDesire: 0
+  currentDoorState: 0
+  awaitDecision: 0
+  destinationSet: 0
 --- !u!65 &797893023134482967
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -172,7 +199,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.5, y: 1, z: 0.5}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &7905574447625178189
 MonoBehaviour:
@@ -201,8 +228,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e0f10df60679947a457de8aa300c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
   sensingDistance: 10
   rotationSpeed: 3
+  pedestrianAttributes: {fileID: 0}
   ticketBoothLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -218,6 +247,7 @@ MonoBehaviour:
   destinationRadius: 5
   maxSlope: 30
   maxAttempts: 10
+  isFullfillingDesire: 0
   hasTicket: 0
   assignedTrain: {fileID: 0}
   selectedBooth: {fileID: 0}
@@ -235,6 +265,20 @@ MonoBehaviour:
   couchLocations: []
   exitLocations: []
   oldPriority: 0
+  door: {fileID: 0}
+  leader: {fileID: 0}
+  isHolder: 0
+  isFollower: 0
+  inDoorwayRegion: 0
+  onPushSide: 0
+  onPullSide: 0
+  waitingTime: 0
+  id: 0
+  OldDestination: {x: 0, y: 0, z: 0}
+  oldFulfillingDesire: 0
+  currentDoorState: 0
+  awaitDecision: 0
+  destinationSet: 0
 --- !u!114 &-702827325607417816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,8 +291,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcdbaea9f99f27c41aac79ed2ab52d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
   sensingDistance: 10
   rotationSpeed: 3
+  pedestrianAttributes: {fileID: 0}
   ticketBoothLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -264,6 +310,7 @@ MonoBehaviour:
   destinationRadius: 5
   maxSlope: 30
   maxAttempts: 10
+  isFullfillingDesire: 0
   hasTicket: 0
   assignedTrain: {fileID: 0}
   selectedBooth: {fileID: 0}
@@ -281,3 +328,63 @@ MonoBehaviour:
   couchLocations: []
   exitLocations: []
   oldPriority: 0
+  door: {fileID: 0}
+  leader: {fileID: 0}
+  isHolder: 0
+  isFollower: 0
+  inDoorwayRegion: 0
+  onPushSide: 0
+  onPullSide: 0
+  waitingTime: 0
+  id: 0
+  OldDestination: {x: 0, y: 0, z: 0}
+  oldFulfillingDesire: 0
+  currentDoorState: 0
+  awaitDecision: 0
+  destinationSet: 0
+--- !u!114 &5435995787832585228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91909ace456c52e47bc6c1846943df5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rush: 0
+  effort: 0
+  kindness: 0
+  care: 0
+  HOLProbability: 0
+  HOFProbability: 0
+  NHProbability: 0
+--- !u!54 &-4257686634226752769
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8875579295769002043}
+  serializedVersion: 4
+  m_Mass: 15
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0

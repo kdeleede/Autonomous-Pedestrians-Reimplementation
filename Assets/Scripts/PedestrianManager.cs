@@ -49,6 +49,7 @@ public class PedestrianManager : MonoBehaviour
         Vector3 spawnPoint = assignedTrain.position;
         GameObject newExiter = Instantiate(commuterVariants[commuterIndex], spawnPoint, Quaternion.identity);
         NavMeshAgent agent = newExiter.GetComponent<NavMeshAgent>();
+        PedestrianAttributes attributes = newExiter.GetComponent<PedestrianAttributes>();
         
         if (agent != null)
         {
@@ -65,6 +66,10 @@ public class PedestrianManager : MonoBehaviour
         if (exiterComponent != null && agent != null)
         {
             exiterComponent.exitLocations = new List<Transform>(enterSpawnPoint);
+
+            attributes.InitializeAttributes(agent);
+
+            exiterComponent.oldPriority = setPriority;
 
             exiterComponent.enabled = true;
 
@@ -88,6 +93,7 @@ public class PedestrianManager : MonoBehaviour
             GameObject newCommuter = Instantiate(commuterVariants[commuterIndex], spawnPoint.position, spawnPoint.rotation);
 
             NavMeshAgent agent = newCommuter.GetComponent<NavMeshAgent>();
+            PedestrianAttributes attributes = newCommuter.GetComponent<PedestrianAttributes>();
             if (agent != null)
             {
                 agent.speed = Random.Range(2.05f, 2.25f);
@@ -108,6 +114,8 @@ public class PedestrianManager : MonoBehaviour
                 pedestrianComponent.danceSpotLocations = new List<Transform>(danceSpotLocations);
                 pedestrianComponent.couchLocations = new List<Transform>(couchLocations);
 
+                attributes.InitializeAttributes(agent);
+
                 pedestrianComponent.oldPriority = setPriority;
 
                 pedestrianComponent.enabled = true;
@@ -118,6 +126,8 @@ public class PedestrianManager : MonoBehaviour
             {
                 Debug.LogError("Pedestrian component is missing on the new commuter.");
             }
+
+
             
         }
         else

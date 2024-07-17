@@ -6,11 +6,12 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine.Rendering;
 using System.Collections;
+using System.Data.Common;
 
 public class AutonomousPedestrian : MonoBehaviour
 {
     [Header ("Attributes")]
-    protected NavMeshAgent agent;
+    public NavMeshAgent agent;
     protected List<Vector3> waypoints;
 
     protected Animator animator;
@@ -20,6 +21,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     public float rotationSpeed = 3.0f;
 
+    public PedestrianAttributes pedestrianAttributes;
 
     [Header ("Layers")]
 
@@ -39,7 +41,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     [Header("Desires")]
 
-    protected bool isFullfillingDesire = false;
+    public bool isFullfillingDesire = false;
 
     protected float thirstRate = 1f;
     protected float maxThirstValue = 500f;
@@ -99,10 +101,39 @@ public class AutonomousPedestrian : MonoBehaviour
 
     public List<Transform> exitLocations;
 
-    [Header("Private Variables")]
+    [Header("Priority Variables")]
 
     public int oldPriority;
 
+    [Header("Doorway Etiquette")]
+
+    public Door door;
+    public AutonomousPedestrian leader;
+
+    
+    public bool isHolder = false; // This pedestrian is the door holder
+    public bool isFollower = false; // This pedestrian is a follower
+
+    public bool inDoorwayRegion;
+
+    public bool onPushSide;
+
+    public bool onPullSide;
+
+
+    public float waitingTime = 0f;
+
+    public int id;
+
+    public Vector3 OldDestination;
+
+    public bool oldFulfillingDesire;
+
+    public DoorAction currentDoorState = DoorAction.Wait;
+
+    public bool awaitDecision = false;
+
+    public bool destinationSet = false;
 
 
 
@@ -161,6 +192,36 @@ public class AutonomousPedestrian : MonoBehaviour
 
 
     }
+
+    public enum DoorAction
+    {
+        Wait,
+
+        LeaderApproachDoor,
+
+        FollowerApproachDoor,
+
+        FollowerWaitForLeaderCommand,
+
+        ApproachDoor,
+        HoldDoor,
+
+        TravelingToHoldDoor,
+
+        Exiting,
+
+        HolderAwaitDecision,
+
+        LetFollowerPassFirst,
+
+        ExitWithoutFollower,
+
+        MakeFollowerHolder,
+
+        FollowerSwitchingToHolder,
+
+        Idle,
+    }
     
     
 
@@ -168,6 +229,7 @@ public class AutonomousPedestrian : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        pedestrianAttributes = GetComponent<PedestrianAttributes>();
 
         agent.isStopped = false;
 
@@ -180,11 +242,23 @@ public class AutonomousPedestrian : MonoBehaviour
         attraction = UnityEngine.Random.Range(0f,1f);
 
         timeBeforeBeingHurried = UnityEngine.Random.Range(120f, 30f);
+
+        id = UnityEngine.Random.Range(0,100);
     }
 
     protected virtual void Update()
     {
+        if(inDoorwayRegion)
+        {
+            waitingTime += Time.deltaTime;
+        }
+        else
+        {
+            waitingTime = 0;
+            currentDoorState = DoorAction.Wait;
+        }
         
+
         if(!isWatchingDance)
         {
             attraction += Time.deltaTime * attractionRate / maxAttractionValue;
@@ -229,8 +303,19 @@ public class AutonomousPedestrian : MonoBehaviour
         }
         tiredness = Mathf.Clamp(tiredness, 0, 1);
         
+        if(isHolder && inDoorwayRegion)
+        {
+            agent.avoidancePriority = 0;
+        }
         
-        
+        else if(inDoorwayRegion)
+        {
+            agent.avoidancePriority = 2;
+        }
+        else
+        {
+            agent.avoidancePriority = oldPriority;
+        }
         if(assignedTrain != null)
         {
             if(assignedTrain.remainingTimeTillDeparture <= timeBeforeBeingHurried)
@@ -254,153 +339,416 @@ public class AutonomousPedestrian : MonoBehaviour
     {
         while (true)
         {
-            if(isWatchingDance == true)
+            if(inDoorwayRegion)
             {
-                if(currentAction != PedestrianAction.GoToWatchDance)
-                {
-                    isWatchingDance = false;
-                }
-                else
-                {
-                    currentAction = PedestrianAction.WatchingDance;
-                }
+                yield return inDoorWayBehaviours();
             }
-
-            if(isSitting == true)
+            else
             {
-                if(currentAction != PedestrianAction.GoToSeat)
+                    
+                if(isWatchingDance == true)
                 {
-                    isSitting = false;
-                    if(selectedCouch != null && selectedSeat != null)
+                    if(currentAction != PedestrianAction.GoToWatchDance)
                     {
-                        selectedCouch.leaveSeat(selectedSeat);
+                        isWatchingDance = false;
                     }
-                    animator.SetBool("Sitting", false);
-                }
-                else
-                {
-                    currentAction = PedestrianAction.Sitting;
-                    if(selectedCouch != null && selectedSeat != null)
+                    else
                     {
-                        selectedCouch.markAsOccupied(selectedSeat, this);
+                        currentAction = PedestrianAction.WatchingDance;
                     }
                 }
-            }
 
-            switch (currentAction)
-            {
-                case PedestrianAction.Idle:
-                    yield return null;
-                    break;
+                if(isSitting == true)
+                {
+                    if(currentAction != PedestrianAction.GoToSeat)
+                    {
+                        isSitting = false;
+                        if(selectedCouch != null && selectedSeat != null)
+                        {
+                            selectedCouch.leaveSeat(selectedSeat);
+                        }
+                        animator.SetBool("Sitting", false);
+                    }
+                    else
+                    {
+                        currentAction = PedestrianAction.Sitting;
+                        if(selectedCouch != null && selectedSeat != null)
+                        {
+                            selectedCouch.markAsOccupied(selectedSeat, this);
+                        }
+                    }
+                }
 
-                case PedestrianAction.GoToTicketBooth:
-                    yield return GoToTicketBooth();
-                    currentAction = PedestrianAction.TravelingToTicketBooth;
-                    break;
+                switch (currentAction)
+                {
+                    case PedestrianAction.Idle:
+                        yield return null;
+                        break;
 
-                case PedestrianAction.TravelingToTicketBooth:
-                    yield return TravelingToTicketBooth();
-                    break;
+                    case PedestrianAction.GoToTicketBooth:
+                        yield return GoToTicketBooth();
+                        currentAction = PedestrianAction.TravelingToTicketBooth;
+                        break;
 
-                case PedestrianAction.GetInTicketLine:
-                    yield return GetInTicketLine(ticketBoothLayer);
-                    currentAction = PedestrianAction.WaitInTicketLine;
-                    break;
+                    case PedestrianAction.TravelingToTicketBooth:
+                        yield return TravelingToTicketBooth();
+                        break;
 
-                case PedestrianAction.WaitInTicketLine:
-                    yield return WaitInTicketLine();
-                    break;
+                    case PedestrianAction.GetInTicketLine:
+                        yield return GetInTicketLine(ticketBoothLayer);
+                        currentAction = PedestrianAction.WaitInTicketLine;
+                        break;
 
-                case PedestrianAction.TravelingToConcord:
-                    yield return TravelingToConcord();
-                    break;
+                    case PedestrianAction.WaitInTicketLine:
+                        yield return WaitInTicketLine();
+                        break;
 
-                case PedestrianAction.GoToVendingMachine:
-                    yield return GoToVendingMachine();
-                    currentAction = PedestrianAction.TravelingToVendingMachine;
-                    break;
+                    case PedestrianAction.TravelingToConcord:
+                        yield return TravelingToConcord();
+                        break;
 
-                case PedestrianAction.TravelingToVendingMachine:
-                    yield return TravelingToVendingMachine();
-                    break;
+                    case PedestrianAction.GoToVendingMachine:
+                        yield return GoToVendingMachine();
+                        currentAction = PedestrianAction.TravelingToVendingMachine;
+                        break;
 
-                case PedestrianAction.GetInVendingMachineLine:
-                    yield return GetInTicketLine(vendingMachineLayer);
-                    currentAction = PedestrianAction.WaitInVendingMachineLine;
-                    break;
+                    case PedestrianAction.TravelingToVendingMachine:
+                        yield return TravelingToVendingMachine();
+                        break;
 
-                case PedestrianAction.WaitInVendingMachineLine:
-                    yield return WaitInVendingMachineLine();
-                    break;
+                    case PedestrianAction.GetInVendingMachineLine:
+                        yield return GetInTicketLine(vendingMachineLayer);
+                        currentAction = PedestrianAction.WaitInVendingMachineLine;
+                        break;
 
-                case PedestrianAction.GotToTrain:
-                    isFullfillingDesire = true;
-                    yield return GotToTrain();
-                    currentAction = PedestrianAction.TravelingToTrain;
-                    break;
+                    case PedestrianAction.WaitInVendingMachineLine:
+                        yield return WaitInVendingMachineLine();
+                        break;
 
-                case PedestrianAction.TravelingToTrain:
-                    yield return TravelingToTrain();
-                    break;
+                    case PedestrianAction.GotToTrain:
+                        isFullfillingDesire = true;
+                        yield return GotToTrain();
+                        currentAction = PedestrianAction.TravelingToTrain;
+                        break;
 
-                case PedestrianAction.GoToDanceSpot:
-                    isFullfillingDesire = true;
-                    yield return GoToLocation(danceSpotLocations, true, 3f);
-                    currentAction = PedestrianAction.TravelingToDanceSpot;
-                    break;
+                    case PedestrianAction.TravelingToTrain:
+                        yield return TravelingToTrain();
+                        break;
 
-                case PedestrianAction.TravelingToDanceSpot:
-                    yield return TravelingToDanceSpot();
-                    break;
+                    case PedestrianAction.GoToDanceSpot:
+                        isFullfillingDesire = true;
+                        yield return GoToLocation(danceSpotLocations, true, 3f);
+                        currentAction = PedestrianAction.TravelingToDanceSpot;
+                        break;
 
-                case PedestrianAction.GoToWatchDance:
-                    isFullfillingDesire = true;
-                    yield return GoToLocation(danceSpotLocations, false, 4f);
-                    currentAction = PedestrianAction.TravelingToWatchDance;
-                    break;
-                
-                case PedestrianAction.TravelingToWatchDance:
-                    yield return TravelingToWatchDance();
-                    break;
+                    case PedestrianAction.TravelingToDanceSpot:
+                        yield return TravelingToDanceSpot();
+                        break;
 
-                case PedestrianAction.WatchingDance:
-                    yield return WatchingDance();
-                    break;
+                    case PedestrianAction.GoToWatchDance:
+                        isFullfillingDesire = true;
+                        yield return GoToLocation(danceSpotLocations, false, 4f);
+                        currentAction = PedestrianAction.TravelingToWatchDance;
+                        break;
+                    
+                    case PedestrianAction.TravelingToWatchDance:
+                        yield return TravelingToWatchDance();
+                        break;
 
-                case PedestrianAction.GoToSeat:
-                    isFullfillingDesire = true;
-                    yield return GoToLocation(couchLocations, false, destinationRadius);
-                    currentAction = PedestrianAction.TravelingToSeatLocation;
-                    break;
+                    case PedestrianAction.WatchingDance:
+                        yield return WatchingDance();
+                        break;
 
-                case PedestrianAction.TravelingToSeatLocation:
-                    yield return TravelingToSeatLocation();
-                    break;
-                
-                case PedestrianAction.FindBestSeat:
-                    yield return FindBestSeat();
-                    break;
+                    case PedestrianAction.GoToSeat:
+                        isFullfillingDesire = true;
+                        yield return GoToLocation(couchLocations, false, destinationRadius);
+                        currentAction = PedestrianAction.TravelingToSeatLocation;
+                        break;
 
-                case PedestrianAction.TravelingToSeat:
-                    yield return TravelingToSeat();
-                    break;
+                    case PedestrianAction.TravelingToSeatLocation:
+                        yield return TravelingToSeatLocation();
+                        break;
+                    
+                    case PedestrianAction.FindBestSeat:
+                        yield return FindBestSeat();
+                        break;
 
-                case PedestrianAction.Sitting:
-                    yield return Sitting();
-                    break;
+                    case PedestrianAction.TravelingToSeat:
+                        yield return TravelingToSeat();
+                        break;
 
-                case PedestrianAction.GoToExit:
-                    yield return GoToLocation(exitLocations, false, destinationRadius);
-                    currentAction = PedestrianAction.TravelingToExit;
-                    break;
+                    case PedestrianAction.Sitting:
+                        yield return Sitting();
+                        break;
 
-                case PedestrianAction.TravelingToExit:
-                    yield return TravelingToExit();
-                    break;
-                
+                    case PedestrianAction.GoToExit:
+                        yield return GoToLocation(exitLocations, false, destinationRadius);
+                        currentAction = PedestrianAction.TravelingToExit;
+                        break;
+
+                    case PedestrianAction.TravelingToExit:
+                        yield return TravelingToExit();
+                        break;
+                    
+                }
             }
         }
     }
+
+    private IEnumerator inDoorWayBehaviours()
+    {
+        isFullfillingDesire = true;
+
+        switch (currentDoorState)
+        {
+            case DoorAction.Wait:
+                yield return DoorActionWait();
+                break;
+            case DoorAction.LeaderApproachDoor:
+                if(leader != null)
+                {
+                    currentDoorState = DoorAction.Wait;
+                }
+                yield return DoorActionApproachDoor();
+                break;
+            case DoorAction.FollowerApproachDoor:
+                yield return DoorActionApproachDoor();
+                break;
+            case DoorAction.HoldDoor:
+                yield return HoldDoorWait();
+                break;
+            case DoorAction.FollowerWaitForLeaderCommand:
+                yield return FollowerWaitForLeaderCommand();
+                break;
+            case DoorAction.ExitWithoutFollower:
+                yield return ExitWithoutFollower();
+                break;
+
+            case DoorAction.HolderAwaitDecision:
+                yield return HolderMakeDecision();
+                break;
+
+            case DoorAction.LetFollowerPassFirst:
+                if(door.totalPedestrians() == 1)
+                {
+                    currentDoorState = DoorAction.ExitWithoutFollower;
+                }
+                yield return HoldDoorWait();
+                break;
+
+            case DoorAction.MakeFollowerHolder:
+                if(door.totalPedestrians() == 1)
+                {
+                    currentDoorState = DoorAction.ExitWithoutFollower;
+                }
+                yield return HoldDoorWait();
+                break;
+
+            case DoorAction.FollowerSwitchingToHolder:
+                yield return FollowerSwitchingToHolder();
+                break;
+
+            case DoorAction.Idle:
+                yield return null;
+                break;
+        }
+    }
+
+    private IEnumerator FollowerSwitchingToHolder()
+    {
+        if(agent.remainingDistance < .5f)
+        {
+            currentDoorState = DoorAction.HolderAwaitDecision;
+            if(leader != null)
+            {
+                leader.currentDoorState = DoorAction.ExitWithoutFollower;
+            }
+        }
+        yield return null;
+    }
+
+    private IEnumerator ExitWithoutFollower()
+    {
+        if(onPushSide)
+        {
+            agent.SetDestination(door.pushExit.position);
+        }
+        else
+        {
+            agent.SetDestination(door.pullExit.position);
+        }
+        yield return null;
+    }
+
+    
+    private IEnumerator HoldDoorWait()
+    {
+        if (!destinationSet)
+        {
+            Vector3 destination;
+
+            if (leader != null)
+            {
+                float distanceToPushSpot = Vector3.Distance(leader.transform.position, door.pushSpotFullyOpen.position);
+                float distanceToPullSpot = Vector3.Distance(leader.transform.position, door.pullSpotFullyOpen.position);
+
+                if (distanceToPushSpot < distanceToPullSpot)
+                {
+                    destination = door.pushSpotFullyOpen.position;
+                }
+                else
+                {
+                    destination = door.pullSpotFullyOpen.position;
+                }
+
+                
+            }
+            else
+            {
+                if (onPushSide)
+                {
+                    destination = door.pushSpotFullyOpen.position;
+                }
+                else
+                {  
+                    destination = door.pullSpotFullyOpen.position;
+                }
+            }
+
+            agent.SetDestination(destination);
+            destinationSet = true;
+        }
+        //currentDoorState = DoorAction.Idle;
+        yield return null;
+    }
+
+    private IEnumerator DoorActionWait()
+    {
+        if(agent.destination != transform.position)
+        {
+            yield return new WaitForSeconds(.9f);
+            if(agent.destination != transform.position)
+            {
+                agent.SetDestination(transform.position);
+            }
+        }
+        if(leader == null)
+        {
+            currentDoorState = DoorAction.LeaderApproachDoor;
+        }
+        else
+        {
+            if(leader.isHolder == true)
+            {
+                isFollower = true;
+                currentDoorState = DoorAction.FollowerApproachDoor;
+            }
+        }
+        yield return null;   
+    }
+
+    private IEnumerator DoorActionApproachDoor()
+    {
+        
+        if(onPushSide)
+        {
+            agent.SetDestination(door.pushExit.position);
+        }
+        else
+        {
+            agent.SetDestination(door.pullExit.position);
+        }
+        float distanceToDoor = Vector3.Distance(transform.position, door.transform.position);
+        if(distanceToDoor < 2f)
+        {
+            if(leader == null)
+            {
+                currentDoorState = DoorAction.HolderAwaitDecision;
+                //isHolder = true;
+                //currentDoorState = DoorAction.HoldDoor;
+                //HolderMakeDecision();
+            }
+            else if(isFollower)
+            {
+                currentDoorState = DoorAction.FollowerWaitForLeaderCommand;
+                //agent.SetDestination(transform.position);
+            }
+            //
+        }
+        yield return null;
+    }
+
+    private IEnumerator HolderMakeDecision()
+    {
+        isHolder = true;
+        //Depending on kindess
+        float randomVal = UnityEngine.Random.value;
+        Debug.Log("Decision Made");
+        if(randomVal <= pedestrianAttributes.HOFProbability)
+        {
+            if(door.totalPedestrians() == 1)
+            {
+                currentDoorState = DoorAction.ExitWithoutFollower;
+            }
+            else
+            {
+                currentDoorState = DoorAction.LetFollowerPassFirst;
+            }
+        }
+        else if(randomVal <= pedestrianAttributes.HOFProbability + pedestrianAttributes.HOLProbability)
+        {
+            if(door.totalPedestrians() == 1)
+            {
+                currentDoorState = DoorAction.ExitWithoutFollower;
+            }
+            else
+            {
+                currentDoorState = DoorAction.MakeFollowerHolder;
+            }
+        }
+        else
+        {
+            currentDoorState = DoorAction.ExitWithoutFollower;
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator FollowerWaitForLeaderCommand()
+    {
+        if(leader.currentDoorState == DoorAction.LetFollowerPassFirst)
+        {
+            if(onPushSide)
+            {
+                agent.SetDestination(door.pushExit.position);
+            }
+            else
+            {
+                agent.SetDestination(door.pullExit.position);
+            }
+        }
+        else if(leader.currentDoorState == DoorAction.MakeFollowerHolder)
+        {
+            Vector3 destination;
+
+            float distanceToPushSpot = Vector3.Distance(leader.transform.position, door.pushSpotFullyOpen.position);
+            float distanceToPullSpot = Vector3.Distance(leader.transform.position, door.pullSpotFullyOpen.position);
+
+            if (distanceToPushSpot < distanceToPullSpot)
+            {
+                destination = door.pushSpotHalfOpen.position;
+            }
+            else
+            {
+                destination = door.pullSpotHalfHalfOpen.position;
+            }
+
+            agent.SetDestination(destination);
+            currentDoorState = DoorAction.FollowerSwitchingToHolder;
+        }
+        yield return null;
+    }
+
 
     private IEnumerator TravelingToExit()
     {
@@ -739,7 +1087,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator WaitInVendingMachineLine()
     {
-        Debug.Log("WaitForVend");
+        //Debug.Log("WaitForVend");
         if (selectedBooth != null)
         {
             Vector3 directionToBooth = (selectedBooth.transform.position - transform.position).normalized;
@@ -793,6 +1141,229 @@ public class AutonomousPedestrian : MonoBehaviour
 
 
     // HELPER FUNCTIONS
+
+    public void selectInitialLeader(bool sameSide)
+    {
+        float sideDotProduct = Vector3.Dot(door.transform.forward, (transform.position - door.transform.position).normalized);
+        List<AutonomousPedestrian> comparablePedestrians;
+        if (sideDotProduct > 0)
+        {
+            if(sameSide)
+            {
+                comparablePedestrians = door.GetPedestriansFacingDoor();
+            }
+            else
+            {
+                comparablePedestrians = door.GetPedestriansFacingAwayFromDoor();
+            }
+        }
+        else
+        {
+            if(sameSide)
+            {
+                comparablePedestrians = door.GetPedestriansFacingAwayFromDoor();
+            }
+            else
+            {
+                comparablePedestrians = door.GetPedestriansFacingDoor();
+            }
+
+        }
+
+        AutonomousPedestrian initialLeader = null;
+
+        float longestWaitingTime = 0;
+
+        foreach (AutonomousPedestrian pedestrian in comparablePedestrians)
+        {
+            float waitingTime = pedestrian.waitingTime;
+            
+            if (waitingTime >= longestWaitingTime)
+            {
+                longestWaitingTime = waitingTime;
+                initialLeader = pedestrian;
+            }
+        }
+
+        leader = initialLeader;
+        
+        if(leader != null)
+        {
+            if(leader == this || leader.waitingTime < this.waitingTime)
+            {
+                leader = null;
+            }
+        }
+    }
+    public void updateLeader()
+    {
+        List<AutonomousPedestrian> pedestriansOnSideA = door.GetPedestriansFacingDoor();
+        List<AutonomousPedestrian> pedestriansOnSideB = door.GetPedestriansFacingAwayFromDoor();
+        
+        // Determine which side this pedestrian is on
+        float sideDotProduct = Vector3.Dot(door.transform.forward, (transform.position - door.transform.position).normalized);
+
+        List<AutonomousPedestrian> sameSidePedestrians;
+        List<AutonomousPedestrian> oppositeSidePedestrians;
+
+        if (sideDotProduct > 0)
+        {
+            sameSidePedestrians = pedestriansOnSideA;
+            oppositeSidePedestrians = pedestriansOnSideB; 
+        }
+        else
+        {
+            sameSidePedestrians = pedestriansOnSideB;
+            oppositeSidePedestrians = pedestriansOnSideA;
+        }
+
+       
+        if(leader != null && !sameSidePedestrians.Contains(leader) && !oppositeSidePedestrians.Contains(leader))
+        {
+            selectInitialLeader(true);//selectInitialLeader(true);
+        }
+        
+
+        if(leader != null) // if leader exists
+        {
+            foreach(AutonomousPedestrian p in sameSidePedestrians)
+            {
+                if (p == this) continue;
+            
+                if(p.leader == leader)
+                {
+                    if(p.waitingTime >= waitingTime)
+                    {
+                        leader = p;
+                    }
+                }
+            }
+            foreach(AutonomousPedestrian p in oppositeSidePedestrians)
+            {
+                if(p == this) continue; 
+                if(p.leader == leader)
+                {
+                    if(p.waitingTime >= waitingTime)
+                    {
+                        leader = p;
+                    }
+                }
+            }
+
+            /*
+            foreach (AutonomousPedestrian pedestrian in sameSidePedestrians)
+            {
+                if (pedestrian == this) continue;
+
+                if(pedestrian.leader == leader)
+                {
+                    if(pedestrian.waitingTime >= waitingTime) // compete
+                    {
+                        leader = pedestrian;
+                        Debug.Log("B " + id.ToString() + " " + leader.id.ToString());
+                        //if(leader.isHolder || leader.isFollower)
+                        {
+                            foreach (AutonomousPedestrian pedestrianOtherSide in oppositeSidePedestrians)
+                            {
+                                if(pedestrianOtherSide.leader == leader)
+                                {
+                                    if(pedestrianOtherSide.waitingTime >= waitingTime)
+                                    {
+                                        leader = pedestrian;
+                                        Debug.Log("C " + id.ToString() + " " + leader.id.ToString());
+                                    }
+                                    else
+                                    {
+                                        //pedestrianOtherSide.leader = this;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //pedestrian.leader = this;
+                    }
+                }
+                
+            }
+            */
+        }
+        else
+        {
+            selectInitialLeader(false);
+            
+
+            if(leader != null)
+            {
+                /*if(leader.waitingTime < waitingTime)
+                {
+                    leader = null;
+                }
+                */
+                //else
+                {   
+                    Debug.Log("yeah");
+                    foreach(AutonomousPedestrian p in sameSidePedestrians)
+                    {
+                        if(p == this) continue;
+
+                        if(p.leader == leader)
+                        {
+                            if(p.waitingTime >= waitingTime)
+                            {
+                                leader = p;
+                            }
+                        }
+                    }
+                    foreach(AutonomousPedestrian p in oppositeSidePedestrians)
+                    {
+                        if(p.leader == leader)
+                        {
+                            if(p.waitingTime >= waitingTime)
+                            {
+                                leader = p;
+                            }
+                        }
+                    }
+                    /*
+                    Debug.Log("D 2 ");
+                    foreach (AutonomousPedestrian pedestrianOtherSide in oppositeSidePedestrians)
+                    {
+                        if(pedestrianOtherSide.leader == leader)
+                        {
+                            Debug.Log("D 3 ");
+                            if(pedestrianOtherSide.waitingTime >= waitingTime)
+                            {
+                                leader = pedestrianOtherSide;
+                                Debug.Log("E " + id.ToString() + " " + leader.id.ToString());
+                            }
+                            else
+                            {
+                                //pedestrianOtherSide.leader = this;
+                            }
+                        }
+                    }
+                    */
+                }
+            }
+        }
+    }
+
+    protected void compete(AutonomousPedestrian pedestrianA, AutonomousPedestrian pedestrianB)
+    {
+        if(pedestrianA.leader == pedestrianB.leader)
+        {
+            if(pedestrianA.waitingTime >= pedestrianB.waitingTime)
+            {
+                pedestrianB.leader = pedestrianA;
+            }
+            else
+            {
+                pedestrianA.leader = pedestrianB;
+            }
+        }
+    }
 
     protected List<GameObject> senseObjects(LayerMask sensingLayer, float sensingDistance)
     {
