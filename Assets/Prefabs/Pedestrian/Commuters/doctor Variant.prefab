@@ -70,9 +70,6 @@ PrefabInstance:
       addedObject: {fileID: 9127185334488064679}
     - targetCorrespondingSourceObject: {fileID: 6993270559495516286, guid: 314b13a2c4f89c74299eabc2a4c725c7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 443736200322840759}
-    - targetCorrespondingSourceObject: {fileID: 6993270559495516286, guid: 314b13a2c4f89c74299eabc2a4c725c7, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1011627260259961630}
     - targetCorrespondingSourceObject: {fileID: 6993270559495516286, guid: 314b13a2c4f89c74299eabc2a4c725c7, type: 3}
       insertIndex: -1
@@ -117,69 +114,6 @@ NavMeshAgent:
   m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &443736200322840759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6058625998549727454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7ac45f3034031641b1d69e42c4da47c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  sensingDistance: 10
-  rotationSpeed: 3
-  pedestrianAttributes: {fileID: 0}
-  ticketBoothLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  entertainersLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  couchLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  vendingMachineLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  destinationRadius: 5
-  maxSlope: 30
-  maxAttempts: 10
-  isFullfillingDesire: 0
-  hasTicket: 1
-  assignedTrain: {fileID: 0}
-  selectedBooth: {fileID: 0}
-  currentQueuePosition: 0
-  currentAction: 0
-  isWatchingDance: 0
-  isSitting: 0
-  selectedEntertainer: {fileID: 0}
-  selectedCouch: {fileID: 0}
-  selectedSeat: {fileID: 0}
-  ticketLocations: []
-  concordLocations: []
-  vendingMachineLocations: []
-  danceSpotLocations: []
-  couchLocations: []
-  exitLocations: []
-  oldPriority: 0
-  door: {fileID: 0}
-  leader: {fileID: 0}
-  isHolder: 0
-  isFollower: 0
-  inDoorwayRegion: 0
-  onPushSide: 0
-  onPullSide: 0
-  waitingTime: 0
-  id: 0
-  OldDestination: {x: 0, y: 0, z: 0}
-  oldFulfillingDesire: 0
-  currentDoorState: 0
-  awaitDecision: 0
-  destinationSet: 0
 --- !u!65 &1011627260259961630
 BoxCollider:
   m_ObjectHideFlags: 0

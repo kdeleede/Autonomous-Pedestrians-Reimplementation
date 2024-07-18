@@ -497,7 +497,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator inDoorWayBehaviours()
     {
-        isFullfillingDesire = true;
+        //isFullfillingDesire = true;
 
         switch (currentDoorState)
         {
@@ -569,13 +569,16 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator ExitWithoutFollower()
     {
-        if(onPushSide)
+        //if(door != null)
         {
-            agent.SetDestination(door.pushExit.position);
-        }
-        else
-        {
-            agent.SetDestination(door.pullExit.position);
+            if(onPushSide)
+            {
+                agent.SetDestination(door.pushExit.position);
+            }
+            else
+            {
+                agent.SetDestination(door.pullExit.position);
+            }
         }
         yield return null;
     }
@@ -716,7 +719,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator FollowerWaitForLeaderCommand()
     {
-        if(leader.currentDoorState == DoorAction.LetFollowerPassFirst)
+        if(leader == null || leader.currentDoorState == DoorAction.LetFollowerPassFirst)
         {
             if(onPushSide)
             {
@@ -1034,17 +1037,20 @@ public class AutonomousPedestrian : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Selected booth is null.");
+                    Debug.Log("Selected booth is null.");
+                    currentAction = PedestrianAction.GoToTicketBooth;
                 }
             }
             else
             {
-                Debug.LogError("No valid ticket booth found.");
+                Debug.Log("No valid ticket booth found.");
+                currentAction = PedestrianAction.GoToTicketBooth;
             }
         }
         else
         {
-            Debug.LogError("No ticket booths detected.");
+            Debug.Log("No ticket booths detected.");
+            currentAction = PedestrianAction.GoToTicketBooth;
         }
     }
 

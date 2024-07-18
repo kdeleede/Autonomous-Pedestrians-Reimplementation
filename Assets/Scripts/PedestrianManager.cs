@@ -22,6 +22,8 @@ public class PedestrianManager : MonoBehaviour
 
     private int setPriority;
 
+    private int counter;
+
     void Awake()
     {
         instance = this;
@@ -29,6 +31,7 @@ public class PedestrianManager : MonoBehaviour
 
     void Start()
     {
+        counter = 0;
         StartCoroutine(SpawnCommuter());
     }
 
@@ -38,7 +41,12 @@ public class PedestrianManager : MonoBehaviour
         {   
             yield return new WaitForSeconds(.1f);
             SpawnNewCommuter();
-            SpawnExiter();
+            counter += 1;
+            if(counter == 5)
+            {
+                SpawnExiter();
+                counter = 0;
+            }
             yield return new WaitForSeconds(1.3f);
         }
     }
@@ -73,7 +81,7 @@ public class PedestrianManager : MonoBehaviour
 
             exiterComponent.enabled = true;
 
-            Debug.Log("Commuter component successfully assigned and enabled for " + newExiter.name);
+            //Debug.Log("Commuter component successfully assigned and enabled for " + newExiter.name);
         }
         else
         {
@@ -120,7 +128,7 @@ public class PedestrianManager : MonoBehaviour
 
                 pedestrianComponent.enabled = true;
 
-                Debug.Log("Commuter component successfully assigned and enabled for " + newCommuter.name);
+                //Debug.Log("Commuter component successfully assigned and enabled for " + newCommuter.name);
             }
             else
             {
