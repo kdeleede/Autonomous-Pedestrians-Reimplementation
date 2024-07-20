@@ -60,12 +60,24 @@ public class PullSensor : MonoBehaviour
                     if(commuter.enabled == true)
                     {
                         commuter.OldDestination = commuter.agent.destination;
-                        commuter.onPullSide = true;
+                        float distancePush = Vector3.Distance(door.pushExit.position, commuter.OldDestination);
+                        float distancePull = Vector3.Distance(door.pullExit.position, commuter.OldDestination);
+                        if(distancePush > distancePull)
+                        {
+                            commuter.onPullSide = true;
+                            door.pedestriansFacingAwayFromDoor.Add(pedestrian);
+
+                        }
+                        else
+                        {
+                            commuter.onPushSide = true;
+                            door.pedestriansFacingDoor.Add(pedestrian);
+                        }
+                        //commuter.onPullSide = true;
                         commuter.isHolder = false;
                         commuter.isFollower = false;
                         commuter.waitingTime = 0;
                         commuter.door = door;
-                        door.pedestriansFacingAwayFromDoor.Add(pedestrian);
                         Debug.Log("COMMMUTE enbled PushInDoor");
                         commuter.selectInitialLeader(true);
 
@@ -77,12 +89,23 @@ public class PullSensor : MonoBehaviour
                     else if (exiter.enabled)
                     {
                         exiter.OldDestination = exiter.agent.destination;
-                        exiter.onPullSide = true;
+                        float distancePush = Vector3.Distance(door.pushExit.position, exiter.OldDestination);
+                        float distancePull = Vector3.Distance(door.pullExit.position, exiter.OldDestination);
+                        if(distancePush > distancePull)
+                        {
+                            exiter.onPullSide = true;
+                            door.pedestriansFacingAwayFromDoor.Add(pedestrian);
+                        }
+                        else
+                        {
+                            exiter.onPushSide = true;
+                            door.pedestriansFacingDoor.Add(pedestrian);
+                        }
+                        //exiter.onPullSide = true;
                         exiter.isHolder = false;
                         exiter.isFollower = false;
                         exiter.waitingTime = 0;
                         exiter.door = door;
-                        door.pedestriansFacingAwayFromDoor.Add(pedestrian);
                         Debug.Log("EXITER enabled PushInDoor");
                         exiter.selectInitialLeader(true);
 
@@ -96,6 +119,7 @@ public class PullSensor : MonoBehaviour
         }
     }
 
+    /*
     void OnTriggerExit(Collider other)
     {
         if ((pedestrianLayer.value & (1 << other.gameObject.layer)) > 0)
@@ -125,11 +149,11 @@ public class PullSensor : MonoBehaviour
                         }
                         commuter.onPullSide = false;
                         //commuter.door = null;
-                        door.pedestriansFacingAwayFromDoor.Remove(pedestrian);
+                        door.unregister(pedestrian);
                         Debug.Log("PullOutDoor");
 
                         //commuter.agent.SetDestination(commuter.OldDestination);
-                        //commuter.isFullfillingDesire = true;
+                        commuter.isFullfillingDesire = false;
                         commuter.destinationSet = false;
                         //commuter.inDoorwayRegion = false;
                         StartCoroutine(setInDoorway(commuter, false));
@@ -143,11 +167,11 @@ public class PullSensor : MonoBehaviour
                         }
                         exiter.onPullSide = false;
                         //exiter.door = null;
-                        door.pedestriansFacingAwayFromDoor.Remove(pedestrian);
+                        door.unregister(pedestrian);
                         Debug.Log("PushOutDoor");
 
                         //exiter.agent.SetDestination(exiter.OldDestination);
-                        //exiter.isFullfillingDesire = true;
+                        exiter.isFullfillingDesire = false;
                         exiter.destinationSet = false;
                         StartCoroutine(setInDoorway(exiter, false));
                         //exiter.inDoorwayRegion = false;
@@ -158,4 +182,5 @@ public class PullSensor : MonoBehaviour
             }
         }
     }
+    */
 }

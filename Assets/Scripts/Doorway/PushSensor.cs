@@ -57,7 +57,17 @@ public class PushSensor : MonoBehaviour
                     if(commuter.enabled)
                     {
                         commuter.OldDestination = commuter.agent.destination;
-                        commuter.onPushSide = true;
+                        float distancePush = Vector3.Distance(door.pushExit.position, commuter.OldDestination);
+                        float distancePull = Vector3.Distance(door.pullExit.position, commuter.OldDestination);
+                        if(distancePush > distancePull)
+                        {
+                            commuter.onPullSide = true;
+                        }
+                        else
+                        {
+                            commuter.onPushSide = true;
+                        }
+                        //commuter.onPushSide = true;
                         commuter.isHolder = false;
                         commuter.isFollower = false;
                         commuter.waitingTime = 0;
@@ -74,7 +84,17 @@ public class PushSensor : MonoBehaviour
                     else if (exiter.enabled)
                     {
                         exiter.OldDestination = exiter.agent.destination;
-                        exiter.onPushSide = true;
+                        float distancePush = Vector3.Distance(door.pushExit.position, exiter.OldDestination);
+                        float distancePull = Vector3.Distance(door.pullExit.position, exiter.OldDestination);
+                        if(distancePush > distancePull)
+                        {
+                            exiter.onPullSide = true;
+                        }
+                        else
+                        {
+                            exiter.onPushSide = true;
+                        }
+                        //exiter.onPushSide = true;
                         exiter.isHolder = false;
                         exiter.isFollower = false;
                         exiter.waitingTime = 0;
@@ -94,6 +114,7 @@ public class PushSensor : MonoBehaviour
         }
     }
 
+    /*
     void OnTriggerExit(Collider other)
     {
         if ((pedestrianLayer.value & (1 << other.gameObject.layer)) > 0)
@@ -123,7 +144,7 @@ public class PushSensor : MonoBehaviour
                         }
                         commuter.onPushSide = false;
                         //commuter.door = null;
-                        door.pedestriansFacingDoor.Remove(pedestrian);
+                        door.unregister(pedestrian);
                         Debug.Log("PushOutDoor");
 
                         //commuter.agent.SetDestination(commuter.OldDestination);
@@ -140,7 +161,7 @@ public class PushSensor : MonoBehaviour
                         }
                         exiter.onPushSide = false;
                         //exiter.door = null;
-                        door.pedestriansFacingDoor.Remove(pedestrian);
+                        door.unregister(pedestrian);
                         Debug.Log("PushOutDoor");
 
                         //exiter.agent.SetDestination(exiter.OldDestination);
@@ -153,5 +174,6 @@ public class PushSensor : MonoBehaviour
             }
         }
     }
+    */
 }
             

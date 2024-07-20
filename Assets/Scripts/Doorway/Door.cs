@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Door : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class Door : MonoBehaviour
 
     public Transform pullSpotHalfHalfOpen;
 
-
+    public int doorID;
 
     
 
@@ -41,6 +42,7 @@ public class Door : MonoBehaviour
         {
             doorRigidbody = GetComponent<Rigidbody>();
         }
+        doorID = UnityEngine.Random.Range(0, 100);
     }
 
     void Update()
@@ -51,6 +53,7 @@ public class Door : MonoBehaviour
         {
             foreach(AutonomousPedestrian p in pedestriansFacingDoor)
             {
+                p.door = this;
                 p.updateLeader();
             }
         }
@@ -59,6 +62,7 @@ public class Door : MonoBehaviour
         {
             foreach (AutonomousPedestrian p in pedestriansFacingAwayFromDoor)
             {
+                p.door = this;
                 p.updateLeader();
             }
         }
@@ -68,6 +72,22 @@ public class Door : MonoBehaviour
     {
         return pedestriansFacingDoor.Count + pedestriansFacingAwayFromDoor.Count;
     }
+
+    public void unregister(AutonomousPedestrian ped)
+    {
+        if(pedestriansFacingDoor.Contains(ped))
+        {
+            pedestriansFacingDoor.Remove(ped);
+        }
+
+        if(pedestriansFacingAwayFromDoor.Contains(ped))
+        {
+            pedestriansFacingAwayFromDoor.Remove(ped);
+        }
+
+        return;
+    }
+    
 
     /*
     void OnTriggerEnter(Collider other)
@@ -139,13 +159,43 @@ public class Door : MonoBehaviour
         hinge.spring = hingeSpring;
     }
 
+   public IEnumerator exitDoor(AutonomousPedestrian ped)
+    {
+        if (ped != null)
+        {
+            if (ped.inDoorwayRegion != false)
+            {
+                if (ped.leader != null && ped.leader.currentDoorState == AutonomousPedestrian.DoorAction.LetFollowerPassFirst)
+                {
+                    ped.leader.currentDoorState = AutonomousPedestrian.DoorAction.HolderAwaitDecision;
+                }
+                ped.onPullSide = false;
+                unregister(ped);
+                Debug.Log("PullOutDoor");
+
+                //ped.isFullfillingDesire = false;
+                ped.destinationSet = false;
+                ped.leader = null;
+                ped.currentDoorState = AutonomousPedestrian.DoorAction.Wait;
+                
+                yield return new WaitForSeconds(0.01f);
+                ped.inDoorwayRegion = false;
+                yield return new WaitForSeconds(0.01f);
+                ped.door = null;
+                ped.agent.SetDestination(ped.OldDestination);
+            }
+        }
+        yield return null;
+    }
+    
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
 
         // Draw lines for pedestrians facing the door
         foreach (AutonomousPedestrian pedestrian in pedestriansFacingDoor)
-        {
+        {   
             if (pedestrian.leader != null)
             {
                 Gizmos.DrawLine(pedestrian.transform.position, pedestrian.leader.transform.position);

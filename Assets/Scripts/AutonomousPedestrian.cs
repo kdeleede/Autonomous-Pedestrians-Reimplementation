@@ -220,6 +220,8 @@ public class AutonomousPedestrian : MonoBehaviour
 
         FollowerSwitchingToHolder,
 
+        TravelingToDoorExit,
+
         Idle,
     }
     
@@ -498,7 +500,10 @@ public class AutonomousPedestrian : MonoBehaviour
     private IEnumerator inDoorWayBehaviours()
     {
         //isFullfillingDesire = true;
-
+        if(leader == this)
+        {
+            leader = null;
+        }
         switch (currentDoorState)
         {
             case DoorAction.Wait:
@@ -551,7 +556,20 @@ public class AutonomousPedestrian : MonoBehaviour
             case DoorAction.Idle:
                 yield return null;
                 break;
+
+            case DoorAction.TravelingToDoorExit:
+                yield return TravelingToDoorExit();
+                break;
         }
+    }
+
+    private IEnumerator TravelingToDoorExit()
+    {
+        if(agent.remainingDistance < .5f)
+        {
+            yield return door.exitDoor(this);
+        }
+        yield return null;
     }
 
     private IEnumerator FollowerSwitchingToHolder()
@@ -574,10 +592,12 @@ public class AutonomousPedestrian : MonoBehaviour
             if(onPushSide)
             {
                 agent.SetDestination(door.pushExit.position);
+                currentDoorState = DoorAction.TravelingToDoorExit;
             }
             else
             {
                 agent.SetDestination(door.pullExit.position);
+                currentDoorState = DoorAction.TravelingToDoorExit;
             }
         }
         yield return null;
@@ -656,10 +676,12 @@ public class AutonomousPedestrian : MonoBehaviour
         if(onPushSide)
         {
             agent.SetDestination(door.pushExit.position);
+            currentDoorState = DoorAction.TravelingToDoorExit;
         }
         else
         {
             agent.SetDestination(door.pullExit.position);
+            currentDoorState = DoorAction.TravelingToDoorExit;
         }
         float distanceToDoor = Vector3.Distance(transform.position, door.transform.position);
         if(distanceToDoor < 2f)
@@ -724,10 +746,12 @@ public class AutonomousPedestrian : MonoBehaviour
             if(onPushSide)
             {
                 agent.SetDestination(door.pushExit.position);
+                currentDoorState = DoorAction.TravelingToDoorExit;
             }
             else
             {
                 agent.SetDestination(door.pullExit.position);
+                currentDoorState = DoorAction.TravelingToDoorExit;
             }
         }
         else if(leader.currentDoorState == DoorAction.MakeFollowerHolder)
@@ -757,6 +781,10 @@ public class AutonomousPedestrian : MonoBehaviour
     {
         if (agent.remainingDistance < .5f)
         {
+            if(door != null)
+            {
+                door.unregister(this);
+            }
             Destroy(gameObject);
         }
         yield return null;
@@ -1086,7 +1114,8 @@ public class AutonomousPedestrian : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Selected booth is null.");
+                Debug.Log("Selected booth is null.");
+                currentAction = PedestrianAction.GetInTicketLine;
             }
         }
     }
@@ -1120,7 +1149,8 @@ public class AutonomousPedestrian : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Selected booth is null.");
+            Debug.Log("Selected booth is null.");
+            currentAction = PedestrianAction.GetInVendingMachineLine;
         }
     }
 
@@ -1195,6 +1225,12 @@ public class AutonomousPedestrian : MonoBehaviour
         
         if(leader != null)
         {
+            if(leader.waitingTime == this.waitingTime)
+            {
+                float randomAdjustment = UnityEngine.Random.Range(0.00f, 0.01f);
+                waitingTime += randomAdjustment;
+            }
+
             if(leader == this || leader.waitingTime < this.waitingTime)
             {
                 leader = null;
@@ -1203,6 +1239,18 @@ public class AutonomousPedestrian : MonoBehaviour
     }
     public void updateLeader()
     {
+
+        if(door == null)
+        {
+            if(leader != null)
+            {
+                door = leader.door;
+            }
+            else
+            {
+                Debug.LogError("Shouldn't happen :(");
+            }
+        }
         List<AutonomousPedestrian> pedestriansOnSideA = door.GetPedestriansFacingDoor();
         List<AutonomousPedestrian> pedestriansOnSideB = door.GetPedestriansFacingAwayFromDoor();
         
@@ -1352,6 +1400,18 @@ public class AutonomousPedestrian : MonoBehaviour
                     }
                     */
                 }
+            }
+        }
+
+        if(leader != null)
+        {
+            if(leader.waitingTime < waitingTime)
+            {
+                leader = null;
+            }
+            if(leader == this)
+            {
+                leader = null;
             }
         }
     }

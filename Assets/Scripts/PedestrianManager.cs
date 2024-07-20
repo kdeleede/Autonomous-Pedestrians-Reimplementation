@@ -41,13 +41,14 @@ public class PedestrianManager : MonoBehaviour
         {   
             yield return new WaitForSeconds(.1f);
             SpawnNewCommuter();
+            SpawnNewCommuter();
             counter += 1;
             if(counter == 5)
             {
                 SpawnExiter();
                 counter = 0;
             }
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitForSeconds(2.3f);
         }
     }
     void SpawnExiter()
