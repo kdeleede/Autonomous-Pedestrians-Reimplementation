@@ -785,6 +785,7 @@ public class AutonomousPedestrian : MonoBehaviour
             {
                 door.unregister(this);
             }
+            PedestrianManager.instance.removePedestrian(this);
             Destroy(gameObject);
         }
         yield return null;
@@ -946,6 +947,7 @@ public class AutonomousPedestrian : MonoBehaviour
     {
         if (agent.remainingDistance < .5f)
         {
+            PedestrianManager.instance.removePedestrian(this);
             Destroy(gameObject);
         }
         yield return null;

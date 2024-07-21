@@ -7,7 +7,7 @@ public class PedestrianManager : MonoBehaviour
 {
     public static PedestrianManager instance;
 
-    [Header("Pedestrian")]
+    [Header("Pedestrian Variants")]
     public List<GameObject> commuterVariants;
 
     [Header("Spawn Points")]
@@ -20,9 +20,15 @@ public class PedestrianManager : MonoBehaviour
     public List<Transform> danceSpotLocations;
     public List<Transform> couchLocations;
 
+    [Header("Pedestrians")]
+
+    public List<AutonomousPedestrian> pedestrians;
+
+
     private int setPriority;
 
     private int counter;
+    
 
     void Awake()
     {
@@ -31,6 +37,7 @@ public class PedestrianManager : MonoBehaviour
 
     void Start()
     {
+        pedestrians = new List<AutonomousPedestrian>();
         counter = 0;
         StartCoroutine(SpawnCommuter());
     }
@@ -81,7 +88,8 @@ public class PedestrianManager : MonoBehaviour
             exiterComponent.oldPriority = setPriority;
 
             exiterComponent.enabled = true;
-
+            
+            pedestrians.Add(exiterComponent);
             //Debug.Log("Commuter component successfully assigned and enabled for " + newExiter.name);
         }
         else
@@ -89,6 +97,7 @@ public class PedestrianManager : MonoBehaviour
             Debug.LogError("Pedestrian component is missing on the new commuter.");
         }
         
+
     }
 
     void SpawnNewCommuter()
@@ -129,6 +138,8 @@ public class PedestrianManager : MonoBehaviour
 
                 pedestrianComponent.enabled = true;
 
+                pedestrians.Add(pedestrianComponent);
+
                 //Debug.Log("Commuter component successfully assigned and enabled for " + newCommuter.name);
             }
             else
@@ -143,6 +154,17 @@ public class PedestrianManager : MonoBehaviour
         {
             Debug.LogError("No enter spawn points available.");
         }
+    }
+
+    public void removePedestrian(AutonomousPedestrian ped)
+    {
+        pedestrians.Remove(ped);
+    }
+
+    public Transform getRandomPedestrian()
+    {
+        int RandomInt = UnityEngine.Random.Range(0, pedestrians.Count);
+        return pedestrians[RandomInt].transform;
     }
 
     void Update()
