@@ -87,60 +87,6 @@ public class Door : MonoBehaviour
 
         return;
     }
-    
-
-    /*
-    void OnTriggerEnter(Collider other)
-    {
-        if ((pedestrianLayer.value & (1 << other.gameObject.layer)) > 0)
-        {
-            Commuter pedestrian = other.GetComponent<Commuter>();
-            if (pedestrian != null)
-            {
-                pedestrian.door = this;
-                Vector3 toDoor = (transform.position - pedestrian.transform.position).normalized;
-                float dotProduct = Vector3.Dot(pedestrian.transform.forward, toDoor);
-
-                // If dotProduct > 0, the pedestrian is facing the door
-                if (dotProduct > 0)
-                {
-                    pedestriansFacingDoor.Add(pedestrian);
-                    Debug.Log("Pedestrian facing door entered");
-                }
-                else
-                {
-                    pedestriansFacingAwayFromDoor.Add(pedestrian);
-                    Debug.Log("Pedestrian facing away from door entered");
-                }
-                pedestrian.inDoorwayRegion = true; // Update pedestrian state
-                pedestrian.selectLeader();
-            }
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if ((pedestrianLayer.value & (1 << other.gameObject.layer)) > 0)
-        {
-            AutonomousPedestrian pedestrian = other.GetComponent<AutonomousPedestrian>();
-            if (pedestrian != null)
-            {
-                pedestrian.door = null;
-                if (pedestriansFacingDoor.Contains(pedestrian))
-                {
-                    pedestriansFacingDoor.Remove(pedestrian);
-                    Debug.Log("Pedestrian facing door exited");
-                }
-                else if (pedestriansFacingAwayFromDoor.Contains(pedestrian))
-                {
-                    pedestriansFacingAwayFromDoor.Remove(pedestrian);
-                    Debug.Log("Pedestrian facing away from door exited");
-                }
-                pedestrian.inDoorwayRegion = false; // Update pedestrian state
-            }
-        }
-    }
-    */
 
     public List<AutonomousPedestrian> GetPedestriansFacingDoor()
     {
@@ -171,7 +117,7 @@ public class Door : MonoBehaviour
                 }
                 ped.onPullSide = false;
                 unregister(ped);
-                Debug.Log("PullOutDoor");
+                //Debug.Log("PullOutDoor");
 
                 //ped.isFullfillingDesire = false;
                 ped.destinationSet = false;

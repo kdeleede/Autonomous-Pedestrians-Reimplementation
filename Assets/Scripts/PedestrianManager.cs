@@ -49,13 +49,10 @@ public class PedestrianManager : MonoBehaviour
             yield return new WaitForSeconds(.1f);
             SpawnNewCommuter();
             SpawnNewCommuter();
-            counter += 1;
-            if(counter == 5)
-            {
-                SpawnExiter();
-                counter = 0;
-            }
-            yield return new WaitForSeconds(2.3f);
+            
+            SpawnExiter();
+            
+            yield return new WaitForSeconds(4.6f);
         }
     }
     void SpawnExiter()

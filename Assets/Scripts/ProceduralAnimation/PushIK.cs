@@ -20,7 +20,6 @@ public class PushIK : MonoBehaviour
         exiter = GetComponent<Exiter>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (commuter.enabled == true && commuter.inDoorwayRegion && commuter.door != null)
@@ -28,7 +27,7 @@ public class PushIK : MonoBehaviour
             float distanceToDoor = Vector3.Distance(transform.position, commuter.door.transform.position);
             if (distanceToDoor <= 1.5f)
             {
-                // Enable the IK constraint
+                // Enable IK
                 if(commuter.isHolder)
                 {
                     twoBoneIK.weight = Mathf.Lerp(twoBoneIK.weight, 1f, Time.deltaTime * lerpSpeed);
@@ -48,7 +47,7 @@ public class PushIK : MonoBehaviour
             }
             else
             {
-                // Disable the IK constraint when not within the distance
+                // Disable IK
                 twoBoneIK.weight = Mathf.Lerp(twoBoneIK.weight, 0f, Time.deltaTime * lerpSpeed);
             }
         }
@@ -57,7 +56,7 @@ public class PushIK : MonoBehaviour
             float distanceToDoor = Vector3.Distance(transform.position, exiter.door.transform.position);
             if (distanceToDoor <= 1.5f)
             {
-                // Enable the IK constraint
+                // Enable  IK
                 if(exiter.isHolder)
                 {
                     twoBoneIK.weight = Mathf.Lerp(twoBoneIK.weight, 1f, Time.deltaTime * lerpSpeed);
@@ -75,13 +74,12 @@ public class PushIK : MonoBehaviour
             }
             else
             {
-                // Disable the IK constraint when not within the distance
+                // Disable IK
                 twoBoneIK.weight = Mathf.Lerp(twoBoneIK.weight, 0f, Time.deltaTime * lerpSpeed);
             }
         }
         else
         {
-            // Ensure the IK constraint is turned off when commuter is not enabled or not in the doorway region
             twoBoneIK.weight = Mathf.Lerp(twoBoneIK.weight, 0f, Time.deltaTime * lerpSpeed);
         }
     }

@@ -60,9 +60,9 @@ public class PullSensor : MonoBehaviour
                     if(commuter.enabled == true)
                     {
                         commuter.OldDestination = commuter.agent.destination;
-                        float distancePush = Vector3.Distance(door.pushExit.position, commuter.OldDestination);
-                        float distancePull = Vector3.Distance(door.pullExit.position, commuter.OldDestination);
-                        if(distancePush > distancePull)
+                        float distancePush = Vector3.Distance(door.pushExit.position, commuter.transform.position);
+                        float distancePull = Vector3.Distance(door.pullExit.position, commuter.transform.position);
+                        if(distancePush < distancePull)
                         {
                             commuter.onPullSide = true;
                             door.pedestriansFacingAwayFromDoor.Add(pedestrian);

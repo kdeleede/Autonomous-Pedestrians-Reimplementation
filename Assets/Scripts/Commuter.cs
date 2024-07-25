@@ -35,7 +35,7 @@ public class Commuter : AutonomousPedestrian
                     {
                         // Go to train
                         currentAction = PedestrianAction.GotToTrain;
-                        Debug.Log("hurried");
+                        //Debug.Log("hurried");
                     }
                     
                     else if(thirst >= attraction && thirst >= tiredness)

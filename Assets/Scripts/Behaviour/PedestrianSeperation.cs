@@ -22,7 +22,6 @@ public class PedestrianSeparation : MonoBehaviour
 
     void MaintainSeparation()
     {
-        // Find all nearby agents
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, sensingDistance);
         List<NavMeshAgent> nearbyAgents = new List<NavMeshAgent>();
 
@@ -31,7 +30,6 @@ public class PedestrianSeparation : MonoBehaviour
             NavMeshAgent nearbyAgent = hitCollider.GetComponent<NavMeshAgent>();
             if (nearbyAgent != null && nearbyAgent != agent)
             {
-                // Check if the agent is traveling in the same direction
                 Vector3 toAgent = nearbyAgent.transform.position - transform.position;
                 if (Vector3.Dot(toAgent.normalized, agent.velocity.normalized) > 0.7f) // adjust this threshold as needed
                 {
@@ -40,7 +38,6 @@ public class PedestrianSeparation : MonoBehaviour
             }
         }
 
-        // Apply separation forces
         Vector3 separationForce = Vector3.zero;
         foreach (var nearbyAgent in nearbyAgents)
         {

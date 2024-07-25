@@ -23,7 +23,8 @@ public class PedestrianAttributes: MonoBehaviour
         HOLProbability = .33f;
         HOFProbability = .33f;
         NHProbability = .33f;
-    }*/
+    }
+    */
     public void InitializeAttributes(NavMeshAgent agent)
     {
         if (agent.speed >= 2.15f)

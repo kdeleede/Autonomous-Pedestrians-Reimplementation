@@ -47,7 +47,7 @@ public class AutonomousPedestrian : MonoBehaviour
     protected float maxThirstValue = 500f;
 
     protected float attractionRate = 1f;
-    protected float maxAttractionValue = 250f;
+    protected float maxAttractionValue = 100f;
 
     protected float tiredRate = 1f;
     protected float maxTiredValue = 500f;
@@ -81,8 +81,6 @@ public class AutonomousPedestrian : MonoBehaviour
 
     public GameObject selectedEntertainer;
 
-    private readonly object behaviourLock = new object();
-
     public Couch selectedCouch;
     public Transform selectedSeat;
 
@@ -90,8 +88,6 @@ public class AutonomousPedestrian : MonoBehaviour
     [Header("Knowledge")]
 
     public List<Transform> ticketLocations;
-
-    public List<Transform> concordLocations;
 
     public List<Transform> vendingMachineLocations;
 
@@ -131,9 +127,11 @@ public class AutonomousPedestrian : MonoBehaviour
 
     public DoorAction currentDoorState = DoorAction.Wait;
 
-    public bool awaitDecision = false;
-
     public bool destinationSet = false;
+
+    public bool leaderWaiting = false;
+
+    public float leaderWaitingTime = 0f;
 
 
 
@@ -203,12 +201,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
         FollowerWaitForLeaderCommand,
 
-        ApproachDoor,
         HoldDoor,
-
-        TravelingToHoldDoor,
-
-        Exiting,
 
         HolderAwaitDecision,
 
@@ -258,6 +251,24 @@ public class AutonomousPedestrian : MonoBehaviour
         {
             waitingTime = 0;
             currentDoorState = DoorAction.Wait;
+        }
+        
+        if(door != null)
+        {
+            float distanceToDoor = Vector3.Distance(transform.position, door.transform.position);
+            if(distanceToDoor > 10f)
+            {
+                door.exitDoor(this);
+            }
+        }
+
+        if(leaderWaiting)
+        {
+            leaderWaitingTime += Time.deltaTime;
+        }
+        else
+        {
+            leaderWaitingTime = 0;
         }
         
 
@@ -561,6 +572,15 @@ public class AutonomousPedestrian : MonoBehaviour
                 yield return TravelingToDoorExit();
                 break;
         }
+
+        if(currentDoorState == DoorAction.LeaderApproachDoor && leader == null)
+        {
+            leaderWaiting = true;
+        }
+        else
+        {
+            leaderWaiting = false;
+        }
     }
 
     private IEnumerator TravelingToDoorExit()
@@ -587,6 +607,7 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator ExitWithoutFollower()
     {
+        isHolder = true;
         //if(door != null)
         {
             if(onPushSide)
@@ -672,19 +693,40 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator DoorActionApproachDoor()
     {
-        
+        if(leaderWaitingTime > 7.5f)
+        {
+            currentDoorState = DoorAction.TravelingToDoorExit;
+        }
+
         if(onPushSide)
         {
             agent.SetDestination(door.pushExit.position);
-            currentDoorState = DoorAction.TravelingToDoorExit;
+            //currentDoorState = DoorAction.TravelingToDoorExit;
         }
         else
         {
             agent.SetDestination(door.pullExit.position);
-            currentDoorState = DoorAction.TravelingToDoorExit;
+            //currentDoorState = DoorAction.TravelingToDoorExit;
         }
+
+        // Error Catching 
+        if(agent.destination == door.pushExit.position || agent.destination == door.pullExit.position)
+        {
+            if(agent.remainingDistance < .5f)
+            {
+                if(leader == null)
+                {
+                    currentDoorState = DoorAction.HolderAwaitDecision;
+                }
+                else if(isFollower)
+                {
+                    currentDoorState = DoorAction.FollowerWaitForLeaderCommand;
+                }
+            }
+        }
+
         float distanceToDoor = Vector3.Distance(transform.position, door.transform.position);
-        if(distanceToDoor < 2f)
+        if(distanceToDoor < 2.5f)
         {
             if(leader == null)
             {
@@ -1022,19 +1064,6 @@ public class AutonomousPedestrian : MonoBehaviour
         }
         
         yield return null;
-
-        
-        /*
-
-        List<GameObject> lines = senseObjects(ticketBoothLayer, 10f);
-        if(lines != null)
-        {
-            GetInTicketLine();
-            currentAction = PedestrianAction.WaitInVendingMachineLine;
-            agent.SetDestination(transform.position);
-        }
-        yield return null;
-        */
     }
 
     private IEnumerator GetInTicketLine(LayerMask layerMask)
@@ -1124,7 +1153,6 @@ public class AutonomousPedestrian : MonoBehaviour
 
     private IEnumerator WaitInVendingMachineLine()
     {
-        //Debug.Log("WaitForVend");
         if (selectedBooth != null)
         {
             Vector3 directionToBooth = (selectedBooth.transform.position - transform.position).normalized;
@@ -1305,45 +1333,6 @@ public class AutonomousPedestrian : MonoBehaviour
                     }
                 }
             }
-
-            /*
-            foreach (AutonomousPedestrian pedestrian in sameSidePedestrians)
-            {
-                if (pedestrian == this) continue;
-
-                if(pedestrian.leader == leader)
-                {
-                    if(pedestrian.waitingTime >= waitingTime) // compete
-                    {
-                        leader = pedestrian;
-                        Debug.Log("B " + id.ToString() + " " + leader.id.ToString());
-                        //if(leader.isHolder || leader.isFollower)
-                        {
-                            foreach (AutonomousPedestrian pedestrianOtherSide in oppositeSidePedestrians)
-                            {
-                                if(pedestrianOtherSide.leader == leader)
-                                {
-                                    if(pedestrianOtherSide.waitingTime >= waitingTime)
-                                    {
-                                        leader = pedestrian;
-                                        Debug.Log("C " + id.ToString() + " " + leader.id.ToString());
-                                    }
-                                    else
-                                    {
-                                        //pedestrianOtherSide.leader = this;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //pedestrian.leader = this;
-                    }
-                }
-                
-            }
-            */
         }
         else
         {
@@ -1352,55 +1341,27 @@ public class AutonomousPedestrian : MonoBehaviour
 
             if(leader != null)
             {
-                /*if(leader.waitingTime < waitingTime)
+                foreach(AutonomousPedestrian p in sameSidePedestrians)
                 {
-                    leader = null;
-                }
-                */
-                //else
-                {   
-                    Debug.Log("yeah");
-                    foreach(AutonomousPedestrian p in sameSidePedestrians)
-                    {
-                        if(p == this) continue;
+                    if(p == this) continue;
 
-                        if(p.leader == leader)
-                        {
-                            if(p.waitingTime >= waitingTime)
-                            {
-                                leader = p;
-                            }
-                        }
-                    }
-                    foreach(AutonomousPedestrian p in oppositeSidePedestrians)
+                    if(p.leader == leader)
                     {
-                        if(p.leader == leader)
+                        if(p.waitingTime >= waitingTime)
                         {
-                            if(p.waitingTime >= waitingTime)
-                            {
-                                leader = p;
-                            }
+                            leader = p;
                         }
                     }
-                    /*
-                    Debug.Log("D 2 ");
-                    foreach (AutonomousPedestrian pedestrianOtherSide in oppositeSidePedestrians)
+                }
+                foreach(AutonomousPedestrian p in oppositeSidePedestrians)
+                {
+                    if(p.leader == leader)
                     {
-                        if(pedestrianOtherSide.leader == leader)
+                        if(p.waitingTime >= waitingTime)
                         {
-                            Debug.Log("D 3 ");
-                            if(pedestrianOtherSide.waitingTime >= waitingTime)
-                            {
-                                leader = pedestrianOtherSide;
-                                Debug.Log("E " + id.ToString() + " " + leader.id.ToString());
-                            }
-                            else
-                            {
-                                //pedestrianOtherSide.leader = this;
-                            }
+                            leader = p;
                         }
                     }
-                    */
                 }
             }
         }
@@ -1459,18 +1420,13 @@ public class AutonomousPedestrian : MonoBehaviour
 
         if(chooseClosest)
         {
-            // Initialize the minimum distance with a large value
             float minDistance = float.MaxValue;
-            // Get the current position
             Vector3 currentPosition = transform.position;
 
-            // Iterate through each location to find the closest one
             foreach (Transform location in locations)
             {
-                // Calculate the distance to the current location
                 float distance = Vector3.Distance(currentPosition, location.position);
 
-                // If this distance is smaller than the current minimum distance, update the minimum distance and selected location
                 if (distance < minDistance)
                 {
                     minDistance = distance;
@@ -1492,7 +1448,6 @@ public class AutonomousPedestrian : MonoBehaviour
 
         while (attempts < maxAttempts && !destinationSet)
         {
-            //Transform pointOfInterest = pointsOfInterest[UnityEngine.Random.Range(0, pointsOfInterest.Count)];
             Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * destinationRadius;
             randomDirection += position;
 
