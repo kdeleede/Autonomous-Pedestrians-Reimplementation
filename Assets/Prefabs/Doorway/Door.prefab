@@ -153,7 +153,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 7f64eac4bd640ef44ae0187dbfcb4089, type: 2}
   - {fileID: 2100000, guid: b7b3f74a2985e9749875bb9f8c07160f, type: 2}
-  - {fileID: 2100000, guid: 3441f6441092d3c459a48c3c48ea63c6, type: 2}
+  - {fileID: 2100000, guid: 1a0610ad3c8951644910f639b50864a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -235,7 +235,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0.01, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.7933423, y: 0.0036630293, z: 0}
+  m_ConnectedAnchor: {x: -0.79332536, y: 0.0036630873, z: 0.000000009313226}
   serializedVersion: 2
   m_UseSpring: 1
   m_Spring:
@@ -308,6 +308,7 @@ MonoBehaviour:
   pullSpotFullyOpen: {fileID: 0}
   pushSpotHalfOpen: {fileID: 0}
   pullSpotHalfHalfOpen: {fileID: 0}
+  doorID: 0
 --- !u!1 &1451398307789540140
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +493,7 @@ MonoBehaviour:
   pullSpotFullyOpen: {fileID: 1374628462213091611}
   pushSpotHalfOpen: {fileID: 5793532153464200719}
   pullSpotHalfHalfOpen: {fileID: 3625432525452902403}
+  doorID: 0
 --- !u!65 &3170550444152920790
 BoxCollider:
   m_ObjectHideFlags: 0
